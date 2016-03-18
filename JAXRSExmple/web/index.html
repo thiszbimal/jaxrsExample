@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//code.jquery.com/jquery.min.js">
+        </script>
+    </head>
+    
+    <body>
+        <div id="loading" style="display:none">Loading.....</div>
+        <form id="form" action="http://localhost:8080/JAXRSExmple/api/studentapi/save" method="post">
+            
+            <div>
+                <label>First Name</label>
+                <input type="text" id="fname" name="fname"/>
+            </div>
+            <div>
+                <label>Last Name</label>
+                <input type="text" id="lname" name="lname"/>
+            </div>
+            <div>
+                <label>Email</label>
+                <input type="email" id="email" name="email"/>
+            </div>
+            <div>
+                <label>Status</label>
+                <input type="radio" name="status" id="status"/>
+            </div>
+            
+            <button type="submit">Save</button>
+        </form>
+        
+        <ul id="result">
+            
+        </ul>
+        
+        
+        <script>
+            $(document).on("ready",function(){
+               $.getJSON("http://localhost:8080/JAXRSExmple/api/studentapi/list",function(data){
+                  var content = "";
+                  var $result = $("#result");
+                  $.each(data,function(i,o){
+                     content+="<li class='row' rel='"+o.id+"'>"+o.firstName+" "+o.lastName+ ", " +o.email+"</li>"; 
+                  });
+                  $result.html(content);
+                  $(".row").on('click',function(){
+                      $("#loading").show();
+                 var id= $(this).attr("rel");
+                 $.getJSON("http://localhost:8080/JAXRSExmple/api/studentapi/"+id,function(data){
+                     $("#fname").val(data.firstName);
+                     $("#lname").val(data.lastName);
+                     $("#email").val(data.email);
+                     $("#loading").hide();
+                 });
+                 
+              });
+               });
+              
+            });
+                 
+          
+             
+        </script>
+    </body>
+</html>
